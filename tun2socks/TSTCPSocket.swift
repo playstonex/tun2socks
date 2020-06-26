@@ -251,9 +251,10 @@ public final class TSTCPSocket {
             var data = data
             var results = [Data]()
             while data.count > MaxLWIPTCPSize {
-                let subData = data.subdata(in: Range(0..<MaxLWIPTCPSize))
+                
+                let subData =  data[0..<MaxLWIPTCPSize]
                 results.append(subData)
-                data = data.subdata(in: Range(MaxLWIPTCPSize..<data.count))
+                data = data[MaxLWIPTCPSize ..< data.count]
             }
             
             if data.count > 0 {
@@ -338,8 +339,7 @@ public final class TSTCPSocket {
         pendingBufferQueue.removeAll()
         pendingDataQueue.removeAll()
         sentCursor = 0
-        identityArg.deinitialize()
-        identityArg.deallocate(capacity: 1)
+        identityArg.deinitialize(count: 1)
         SocketDict.socketDict.removeValue(forKey: identity)
     }
     
