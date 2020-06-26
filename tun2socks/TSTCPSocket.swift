@@ -248,17 +248,19 @@ public final class TSTCPSocket {
         }
         
         if needSplit {
-            var data = data
-            var results = [Data]()
-            while data.count > MaxLWIPTCPSize {
+//            var cacheData = data
+            var results : [Data] = []
+            var index = 0
+            while data.count > index + MaxLWIPTCPSize {
                 
-                let subData =  data[0..<MaxLWIPTCPSize]
+                let subData =  data[index ..< index + MaxLWIPTCPSize]
                 results.append(subData)
-                data = data[MaxLWIPTCPSize ..< data.count]
+                index += MaxLWIPTCPSize;
+//                cacheData = cacheData[MaxLWIPTCPSize ..< cacheData.count]
             }
             
-            if data.count > 0 {
-                results.append(data)
+            if index < data.count {
+                results.append(data[index ..< data.count])
             }
             
             for subData in results {
